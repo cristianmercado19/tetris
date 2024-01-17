@@ -1,94 +1,93 @@
-import { Board, Level, LevelFactory, Piece, ScoringSystem } from '../model';
-import { View } from '../view/view.interface';
-import { Controller } from '../interface/controller.interface';
-import { MultiplayerConnection } from '../interface/multiplayer-connection.interface';
-import { SoundPlayer } from '../sound/sound-manager.interface';
-import { FullBoardException } from '../exceptions/full-board.exception';
+import { Board, Level, LevelFactory, Piece, ScoringSystem } from "../model";
+import { View } from "../view/view.interface";
+import { Controller } from "../interface/controller.interface";
+import { MultiplayerConnection } from "../interface/multiplayer-connection.interface";
+import { SoundPlayer } from "../sound/sound-manager.interface";
+import { FullBoardException } from "../exceptions/full-board.exception";
 
 export class Game {
+  public view: View;
+  public soundPlayer: SoundPlayer;
+  public controller: Controller;
+  private multiplayer: MultiplayerConnection;
 
-	public view: View;
-	public soundPlayer: SoundPlayer;
-	public controller: Controller;
-	private multiplayer: MultiplayerConnection;
-
-	private gameId = 0;
+  private gameId = 0;
 
   private scoring = new ScoringSystem();
 
-	private levels: Array<Level> = [];
-	private level: Level;
-	private currentLevelIndex = -1;
+  private levels: Array<Level> = [];
+  private level: Level;
+  private currentLevelIndex = -1;
   private completedLinesCurrentLevel: number;
 
-	private piece: Piece;
-	private nextPiece: Piece;
+  private piece: Piece;
+  private nextPiece: Piece;
 
-	private board = new Board();
-	private fallingPieceInterval: number;
+  private board = new Board();
+  private fallingPieceInterval: number;
 
-	public init(): void {
-		this.attachToController();
-		this.view.setupBoard(Board.ROWS, Board.COLUMNS);
-		this.view.drawBoard(this.board);
+  public init(): void {
+    this.attachToController();
+    this.view.setupBoard(Board.ROWS, Board.COLUMNS);
+    this.view.drawBoard(this.board);
     this.initializeLevels();
-	}
+  }
 
-	public newGame(): void {
-		this.view.showSingleOrMultiplayerOptions();
-	}
+  public newGame(): void {
+    this.view.showSingleOrMultiplayerOptions();
+  }
 
-	public changeMultiplayerConnection(singleOrMultiplayerConnection: MultiplayerConnection): void {
-		this.multiplayer = singleOrMultiplayerConnection;
-		this.attachToMultiplayer();
-	}
+  public changeMultiplayerConnection(singleOrMultiplayerConnection: MultiplayerConnection): void {
+    this.multiplayer = singleOrMultiplayerConnection;
+    this.attachToMultiplayer();
+  }
 
-	public singlePlayerOptionSelected(): void {
-		this.view.hideSingleOrMultiplayerOptions();
-		this.start();
-	}
+  public singlePlayerOptionSelected(): void {
+    this.view.hideSingleOrMultiplayerOptions();
+    this.start();
+  }
 
-	public multiplayerOptionSelected(): void {
-		this.view.hideSingleOrMultiplayerOptions();
-		this.view.showMultiplayerOptionsCreateOrJoinGame();
-	}
+  public multiplayerOptionSelected(): void {
+    this.view.hideSingleOrMultiplayerOptions();
+    this.view.showMultiplayerOptionsCreateOrJoinGame();
+  }
 
-	public createMultiplayerGame(): void {
-		this.view.hideCreateOrJoinGame();
-		this.gameId = this.multiplayer.createNewGame();
-		this.showMultiplayerGameId();
-	}
+  public createMultiplayerGame(): void {
+    this.view.hideCreateOrJoinGame();
+    this.gameId = this.multiplayer.createNewGame();
+    this.showMultiplayerGameId();
+  }
 
-	public joinGame(): void {
-		this.view.hideCreateOrJoinGame();
-		this.view.showEnterGameId();
-	}
+  public joinGame(): void {
+    this.view.hideCreateOrJoinGame();
+    this.view.showEnterGameId();
+  }
 
-	public joinGameWithId(gameId: number): void {
-		this.gameId = gameId;
-		this.multiplayer.joinGame(gameId);
-		this.view.hideEnterGameId();
-	}
+  public joinGameWithId(gameId: number): void {
+    this.gameId = gameId;
+    this.multiplayer.joinGame(gameId);
+    this.view.hideEnterGameId();
+  }
 
-	public showMultiplayerGameId(): void {
-		this.view.showNewMultiplayerGameCreateWithId(this.gameId);
-	}
+  public showMultiplayerGameId(): void {
+    this.view.showNewMultiplayerGameCreateWithId(this.gameId);
+  }
 
-	public mute(): void {
-		this.soundPlayer.mute();
-	}
+  public mute(): void {
+    this.soundPlayer.mute();
+  }
 
-	public unMute(): void {
-		this.soundPlayer.unMute();
-	}
+  public unMute(): void {
+    this.soundPlayer.unMute();
+  }
 
-	private start(): void {
+  private start(): void {
     this.currentLevelIndex = -1;
     this.scoring.reset();
     this.view.hideGameOver();
 
     this.startNewLevel();
-	}
+  }
 
   private initializeLevels(): void {
     this.levels = LevelFactory.Levels();
@@ -101,65 +100,64 @@ export class Game {
     this.controller.onRotate(() => this.rotate());
   }
 
-	private attachToMultiplayer(): void {
-		this.multiplayer.onPlayer2BoardUpdated((board: Board) => this.updatePlayer2Board(board));
-		this.multiplayer.onPlayer2PieceUpdated((piece: Piece) => this.updatePlayer2Piece(piece));
-		this.multiplayer.onPlayer2Connected(() => this.player2Connected());
-	}
+  private attachToMultiplayer(): void {
+    this.multiplayer.onPlayer2BoardUpdated((board: Board) => this.updatePlayer2Board(board));
+    this.multiplayer.onPlayer2PieceUpdated((piece: Piece) => this.updatePlayer2Piece(piece));
+    this.multiplayer.onPlayer2Connected(() => this.player2Connected());
+  }
 
-	private player2Connected(): void {
-		this.view.hideNewMultiplayerGameCreateWithId();
-		this.start();
-	}
+  private player2Connected(): void {
+    this.view.hideNewMultiplayerGameCreateWithId();
+    this.start();
+  }
 
-	private updatePlayer2Piece(piece: Piece): void {
-		this.view.drawPlayer2Piece(piece);
-	}
+  private updatePlayer2Piece(piece: Piece): void {
+    this.view.drawPlayer2Piece(piece);
+  }
 
-	private updatePlayer2Board(board: Board): void {
-		this.view.drawPlayer2Board(board);
-	}
+  private updatePlayer2Board(board: Board): void {
+    this.view.drawPlayer2Board(board);
+  }
 
-	private moveLeft(): void {
-		const pieceInNewPosition = this.piece.clone();
-		pieceInNewPosition.moveLeft();
-		this.movePieceToNewPositionIfNoCollision(pieceInNewPosition);
-	}
+  private moveLeft(): void {
+    const pieceInNewPosition = this.piece.clone();
+    pieceInNewPosition.moveLeft();
+    this.movePieceToNewPositionIfNoCollision(pieceInNewPosition);
+  }
 
-	private moveRight(): void {
-		const pieceInNewPosition = this.piece.clone();
-		pieceInNewPosition.moveRight();
-		this.movePieceToNewPositionIfNoCollision(pieceInNewPosition);
-	}
+  private moveRight(): void {
+    const pieceInNewPosition = this.piece.clone();
+    pieceInNewPosition.moveRight();
+    this.movePieceToNewPositionIfNoCollision(pieceInNewPosition);
+  }
 
-	private async moveDown(): Promise<void> {
-		const pieceInNewPosition = this.piece.clone();
-		pieceInNewPosition.moveDown();
+  private async moveDown(): Promise<void> {
+    const pieceInNewPosition = this.piece.clone();
+    pieceInNewPosition.moveDown();
 
-		if (!this.movePieceToNewPositionIfNoCollision(pieceInNewPosition)) {
-			await this.freezePiece();
-		}
-	}
+    if (!this.movePieceToNewPositionIfNoCollision(pieceInNewPosition)) {
+      await this.freezePiece();
+    }
+  }
 
-	private rotate(): void {
-		const pieceInNewPosition = this.piece.clone();
-		pieceInNewPosition.rotate();
+  private rotate(): void {
+    const pieceInNewPosition = this.piece.clone();
+    pieceInNewPosition.rotate();
 
-		if (this.movePieceToNewPositionIfNoCollision(pieceInNewPosition)) {
-			this.soundPlayer.playRotate();
-		}
-	}
+    if (this.movePieceToNewPositionIfNoCollision(pieceInNewPosition)) {
+      this.soundPlayer.playRotate();
+    }
+  }
 
-	private async freezePiece(): Promise<void> {
-		this.pauseFallingPiece();
-		this.controller.lock();
+  private async freezePiece(): Promise<void> {
+    this.pauseFallingPiece();
+    this.controller.lock();
     this.freezePieceOnDashboard();
     this.calculateScoringForNewFreezedPiece();
 
     await this.removeLinesIfAny();
 
     try {
-
       if (this.nextPiece) {
         this.putNextPieceIntoBoard();
         this.controller.unlock();
@@ -167,13 +165,12 @@ export class Game {
       } else {
         this.levelCompleted();
       }
-
     } catch (error) {
       if (error instanceof FullBoardException) {
         this.gameOver();
       }
     }
-	}
+  }
 
   private freezePieceOnDashboard(): void {
     this.board.freezePiece(this.piece);
@@ -191,24 +188,23 @@ export class Game {
     this.view.showScore(score);
   }
 
-	private levelCompleted(): void {
-		this.soundPlayer.stopMusicBackground();
+  private levelCompleted(): void {
+    this.soundPlayer.stopMusicBackground();
     this.view.showLevelCompleted();
-		this.soundPlayer.playLevelComplete();
+    this.soundPlayer.playLevelComplete();
 
-		setTimeout(() => {
+    setTimeout(() => {
       this.view.hideLevelCompleted();
-			this.startNewLevel();			
-		}, 5000);
-
-	}
+      this.startNewLevel();
+    }, 5000);
+  }
 
   private async removeLinesIfAny(): Promise<void> {
     let totalCompletedLines = 0;
     let completedLineInfo = this.board.isACompletedLine();
 
-    while(completedLineInfo !== null) {
-			totalCompletedLines++;
+    while (completedLineInfo !== null) {
+      totalCompletedLines++;
 
       const lineIndex = completedLineInfo.lineIndex;
 
@@ -218,30 +214,30 @@ export class Game {
       completedLineInfo = this.board.isACompletedLine();
     }
 
-		this.completedLinesCurrentLevel += totalCompletedLines;
+    this.completedLinesCurrentLevel += totalCompletedLines;
 
-    if (totalCompletedLines> 0) {
-      this.scoring.linesPerClear(totalCompletedLines, this.currentLevelIndex +1);
+    if (totalCompletedLines > 0) {
+      this.scoring.linesPerClear(totalCompletedLines, this.currentLevelIndex + 1);
       this.showScore();
     }
   }
 
   private async cleanALine(lineNumber: number): Promise<void> {
-		const me = this;
+    const me = this;
 
-		this.soundPlayer.playLineCompleted();
-		this.view.cleanLine(lineNumber);
+    this.soundPlayer.playLineCompleted();
+    this.view.cleanLine(lineNumber);
 
-		const waitForContinue = new Promise((resolve, reject) => {
-			setTimeout(() => {
-				me.board.removeLine(lineNumber);
-				me.drawBoard();			
-	
-				resolve('');
-			}, 500);
-		});
+    const waitForContinue = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        me.board.removeLine(lineNumber);
+        me.drawBoard();
 
-		await waitForContinue;
+        resolve("");
+      }, 500);
+    });
+
+    await waitForContinue;
   }
 
   private putNextPieceIntoBoard() {
@@ -270,97 +266,96 @@ export class Game {
     }
   }
 
-	private drawNextShape(): void {
-		this.view.drawNextShape(this.nextPiece.shape);
-	}
+  private drawNextShape(): void {
+    this.view.drawNextShape(this.nextPiece.shape);
+  }
 
-	private movePieceToNewPositionIfNoCollision(pieceInNewPosition: Piece): boolean {
+  private movePieceToNewPositionIfNoCollision(pieceInNewPosition: Piece): boolean {
+    const canAllocatePiece = this.board.canAllocatePiece(pieceInNewPosition);
 
-		const canAllocatePiece = this.board.canAllocatePiece(pieceInNewPosition);
-
-		if (canAllocatePiece) {
+    if (canAllocatePiece) {
       this.drawBoard();
       this.piece = pieceInNewPosition;
-      this.drawPiece()
-		} 
-		
-		return canAllocatePiece;
-	}
+      this.drawPiece();
+    }
 
-	private startNewLevel() {
-		this.pauseFallingPiece();
+    return canAllocatePiece;
+  }
+
+  private startNewLevel() {
+    this.pauseFallingPiece();
     this.currentLevelIndex++;
-		this.initLevelVariables();
+    this.initLevelVariables();
     this.startLevelGame();
     this.startFallingPiece();
   }
 
-	private initLevelVariables(): void {
+  private initLevelVariables(): void {
     this.completedLinesCurrentLevel = 0;
-		this.board.clean();
-		this.level = this.levels[this.currentLevelIndex];
+    this.board.clean();
+    this.level = this.levels[this.currentLevelIndex];
     this.level.init();
-		this.piece = new Piece(this.level.getNextShape());
-		this.nextPiece = new Piece(this.level.getNextShape());
-	}
+    this.piece = new Piece(this.level.getNextShape());
+    this.nextPiece = new Piece(this.level.getNextShape());
+  }
 
-	private startLevelGame(): void {
+  private startLevelGame(): void {
     this.showNewLevelStart();
     this.showTotalLines();
     this.showScore();
-		this.centerPiece();
-		this.drawBoard();
-		this.drawPiece();
+    this.centerPiece();
+    this.drawBoard();
+    this.drawPiece();
     this.drawNextShape();
 
     this.playLevelMusic();
-		this.resumeControl();
-	}
+    this.resumeControl();
+  }
 
-	private resumeControl(): void {
-		this.controller.unlock();
-	}
+  private resumeControl(): void {
+    this.controller.unlock();
+  }
 
-	private playLevelMusic(): void {
-		this.soundPlayer.playMusicBackground(this.currentLevelIndex);
-	}
+  private playLevelMusic(): void {
+    this.soundPlayer.playMusicBackground(this.currentLevelIndex);
+  }
 
   private showTotalLines(): void {
     this.view.showTotalLines(this.completedLinesCurrentLevel);
   }
 
   private showNewLevelStart(): void {
-    this.view.showNewLevelStart(this.currentLevelIndex+1);
+    this.view.showNewLevelStart(this.currentLevelIndex + 1);
   }
 
-	private startFallingPiece(): void {
-		const me = this;
-		this.fallingPieceInterval = setInterval(() => me.moveDown(), me.level.speed)
-	}
+  private startFallingPiece(): void {
+    const me = this;
+    this.fallingPieceInterval = setInterval(() => me.moveDown(), me.level.speed);
+  }
 
   private pauseFallingPiece(): void {
     clearInterval(this.fallingPieceInterval);
   }
 
-	private drawPiece(): void {
-		this.view.drawPiece(this.piece);
-		this.multiplayer.sendNewPieceToPlayer2(this.piece);
-	}
+  private drawPiece(): void {
+    this.view.drawPiece(this.piece);
+    this.multiplayer.sendNewPieceToPlayer2(this.piece);
+  }
 
-	private drawBoard(): void {
-		this.view.drawBoard(this.board);
-		this.multiplayer.sendNewBoardToPlayer2(this.board);
-	}
+  private drawBoard(): void {
+    this.view.drawBoard(this.board);
+    this.multiplayer.sendNewBoardToPlayer2(this.board);
+  }
 
-	private centerPiece(): void {
+  private centerPiece(): void {
     const boardMiddleX = this.board.getMiddleX();
     const shapeMiddleX = this.piece.shape.matrix.length / 2;
 
-		this.piece.x = Math.floor(boardMiddleX - shapeMiddleX);
-		this.piece.y = this.board.getTopY();
+    this.piece.x = Math.floor(boardMiddleX - shapeMiddleX);
+    this.piece.y = this.board.getTopY();
 
-		if (!this.board.canAllocatePiece(this.piece)){
-			throw new FullBoardException();				
-		}
-	}
+    if (!this.board.canAllocatePiece(this.piece)) {
+      throw new FullBoardException();
+    }
+  }
 }

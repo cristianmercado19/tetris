@@ -138,7 +138,7 @@ export class AppComponent implements OnInit, AfterViewInit, View {
 
   showNewLevelStart(levelNumber: number): void {
     this.backgroundLevelClass = `backgroundLevel${levelNumber}`;
-    this.levelNumber  = '' + levelNumber;
+    this.levelNumber = '' + levelNumber;
   }
 
   showTotalLines(currentLevelLines: number): void {
@@ -155,7 +155,11 @@ export class AppComponent implements OnInit, AfterViewInit, View {
     this.cleanBoard(this.player2Board);
   }
 
-  private setupGameBoard(rows: number, columns: number, board: CanvasRenderingContext2D): void {
+  private setupGameBoard(
+    rows: number,
+    columns: number,
+    board: CanvasRenderingContext2D
+  ): void {
     const BLOCK_SIZE = 30;
 
     board.canvas.width = columns * BLOCK_SIZE;
@@ -171,10 +175,9 @@ export class AppComponent implements OnInit, AfterViewInit, View {
   }
 
   onMuteOrUnmute(): void {
-
-    if (this.isMute){
+    if (this.isMute) {
       this.game.unMute();
-    }else{
+    } else {
       this.game.mute();
     }
 
@@ -182,19 +185,27 @@ export class AppComponent implements OnInit, AfterViewInit, View {
   }
 
   drawPlayer2Piece(piece: Piece): void {
-    console.log(`🚀 ~ file: app.component.ts ~ line 176 ~ AppComponent ~ drawPlayer2Piece ~ piece`, piece)
+    console.log(
+      `🚀 ~ file: app.component.ts ~ line 176 ~ AppComponent ~ drawPlayer2Piece ~ piece`,
+      piece
+    );
   }
 
   showPlayer2Score(score: number): void {
-    console.log(`🚀 ~ file: app.component.ts ~ line 180 ~ AppComponent ~ showPlayer2Score ~ score`, score)
+    console.log(
+      `🚀 ~ file: app.component.ts ~ line 180 ~ AppComponent ~ showPlayer2Score ~ score`,
+      score
+    );
   }
 
   showPlayer2TotalLines(currentLevelLines: number): void {
-    console.log(`🚀 ~ file: app.component.ts ~ line 184 ~ AppComponent ~ showPlayer2TotalLines ~ currentLevelLines`, currentLevelLines)
+    console.log(
+      `🚀 ~ file: app.component.ts ~ line 184 ~ AppComponent ~ showPlayer2TotalLines ~ currentLevelLines`,
+      currentLevelLines
+    );
   }
 
   cleanLine(lineIndex: number): void {
-
     for (let x = 0; x < Board.ROWS + 1; x++) {
       this.board.fillStyle = '#DB83DB';
       this.board.strokeStyle = '#A09FDD';
@@ -328,12 +339,7 @@ export class AppComponent implements OnInit, AfterViewInit, View {
 
   private cleanBoard(board: CanvasRenderingContext2D): void {
     board.fillStyle = 'black';
-    board.fillRect(
-      0,
-      0,
-      board.canvas.width,
-      board.canvas.height
-    );
+    board.fillRect(0, 0, board.canvas.width, board.canvas.height);
   }
 
   drawBoard(board: Board): void {
@@ -344,12 +350,14 @@ export class AppComponent implements OnInit, AfterViewInit, View {
     this.drawGameBoard(this.player2Board, board);
   }
 
-  private drawGameBoard(canvasBoard: CanvasRenderingContext2D, board: Board): void {
+  private drawGameBoard(
+    canvasBoard: CanvasRenderingContext2D,
+    board: Board
+  ): void {
     this.cleanBoard(canvasBoard);
 
     board.board.forEach((row, y) => {
       row.forEach((value, x) => {
-
         if (value !== null) {
           canvasBoard.strokeStyle = value.strokeStyle;
           canvasBoard.fillStyle = value.fillStyle;
@@ -360,10 +368,7 @@ export class AppComponent implements OnInit, AfterViewInit, View {
           canvasBoard.fill();
           canvasBoard.stroke();
         }
-
       });
     });
   }
 }
-
-
