@@ -1,0 +1,15 @@
+{
+  "name": "p2pt",
+  "version": "1.5.0",
+  "description": "",
+  "main": "./src/p2pt.umd.min.js",
+  "types": "./src/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p tsconfig.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}

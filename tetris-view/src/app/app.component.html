@@ -1,0 +1,71 @@
+<div class="header">
+  <h1 class="title">TETRIS</h1>
+</div>
+
+<div *ngIf="this.newMultiplayerGameCreatedVisible" class="window-layer">
+  <p>New Game Created with id:<br><span>{{gameId}}</span><br>
+  Share this id to other player and wait for joining.</p>
+</div>
+
+<div *ngIf="this.enterGameIdVisible" class="window-layer">
+
+  <input type="text" class="form-control" placeholder="enter game id"
+  [(ngModel)]="gameId">
+
+  <a href="#" (click)="onJoinGameWithId()" class="primary">Join Game</a>
+</div>
+
+<div *ngIf="this.singleOrMultiplayerOptionsVisible" class="window-layer">
+  <a href="#" (click)="onSinglePlayer()" class="primary">Single</a>
+  <a href="#" (click)="onMultiPlayer()" class="secondary">Multiplayer</a>
+</div>
+
+<div *ngIf="this.multiplayerOptionsCreateOrJoinVisible" class="window-layer">
+  <a href="#" (click)="onCreateGame()" class="primary">Create</a>
+  <a href="#" (click)="onJoinGame()" class="secondary">Join</a>
+</div>
+
+<div class="container {{this.backgroundLevelClass}}">
+
+  <div class="menu">
+    <a href="#" (click)="onNewGame()" class="newGame mb-menu">New Game</a>
+    <a href="#" (click)="onMuteOrUnmute()"
+      [ngClass]="{
+      'playSound mb-menu': this.isMute,
+      'muteSound mb-menu': !this.isMute
+    }">{{this.isMute? 'Play Sound': 'Mute'}}</a>
+  </div>
+
+  <div class="main">
+    <canvas #board id="board" class="game-board"></canvas>
+
+    <div *ngIf="this.isGameOver" class="gameOver">
+      <span>GAME OVER</span>
+    </div>
+
+    <div *ngIf="this.isLevelCompleted" class="levelCompleted">
+      <span>LEVEL COMPLETED</span>
+    </div>
+
+  </div>
+
+  <div class="score">
+    <div>
+      <canvas #next id="next" class="next"></canvas>
+    </div>
+    <div>
+      <p>Score: <span id="score">{{this.score}}</span></p>
+      <p>Lines: <span id="lines">{{this.totalLines}}</span></p>
+      <p>Level: <span id="level">{{this.levelNumber}}</span></p>
+    </div>
+
+  </div>
+
+
+  <div class="main">
+    <canvas #player2Board id="player2Board" class="game-board"></canvas>
+
+  </div>
+
+</div>
+

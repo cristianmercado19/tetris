@@ -1,0 +1,275 @@
+@font-face {
+  font-family: tetrisFont;
+  src: url('/assets/fonts/tetri.ttf');
+}
+
+@font-face {
+  font-family: tetris2Font;
+  src: url('/assets/fonts/tetrisyde.ttf');
+}
+
+@font-face {
+  font-family: tetris3Font;
+  src: url('/assets/fonts/muni.ttf');
+}
+
+.header {
+  text-align: center;
+  max-width: 850px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  max-width: 850px;
+  padding: 40px;
+  border-radius: 5px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  min-width: 120px;
+}
+
+.main {
+  position: relative;
+}
+
+.mb-menu {
+  margin-bottom: 10px;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: tetris3Font;
+  font-size: xxx-large;
+  margin: 5px;
+  min-width: 130px;
+
+  p {
+    padding: 5px;
+    background-color: white;
+    border-radius: 5px;
+
+  }
+}
+
+.game-board {
+  border: double white;
+  border-radius: 5px ;
+}
+
+.title {
+  font-family: tetris2Font;
+  padding-left: 100px;
+  font-size: medium;
+}
+
+#next {
+  position: absolute;
+  box-sizing: border-box;
+  background-color: black;
+  border: double white;
+  border-radius: 5px;
+}
+
+.newGame {
+	box-shadow: 3px 4px 0px 0px #1564ad;
+	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+	background-color:#79bbff;
+	border-radius:5px;
+	border:1px solid #337bc4;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	font-weight:bold;
+  padding: 5px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528ecc;
+}
+.newGame:hover {
+	background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+	background-color:#378de5;
+}
+.newGame:active {
+	position:relative;
+	top:1px;
+}
+
+.muteSound {
+	box-shadow: 3px 4px 0px 0px #8a2a21;
+	background:linear-gradient(to bottom, #c62d1f 5%, #f24437 100%);
+	background-color:#c62d1f;
+	border-radius:5px;
+	border:1px solid #d02718;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	font-weight:bold;
+	padding:5px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #810e05;
+}
+.muteSound:hover {
+	background:linear-gradient(to bottom, #f24437 5%, #c62d1f 100%);
+	background-color:#f24437;
+}
+.muteSound:active {
+	position:relative;
+	top:1px;
+}
+
+.playSound {
+	box-shadow: 3px 4px 0px 0px #9acc85;
+	background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
+	background-color:#74ad5a;
+	border-radius:5px;
+	border:1px solid #3b6e22;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	font-weight:bold;
+	padding:5px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #92b879;
+}
+.playSound:hover {
+	background:linear-gradient(to bottom, #68a54b 5%, #74ad5a 100%);
+	background-color:#68a54b;
+}
+.playSound:active {
+	position:relative;
+	top:1px;
+}
+
+.gallery {
+  margin-top: auto;
+}
+
+.gameOver{
+  position: absolute;
+  top: 40%;
+  left: 12%;
+  font-family: tetris3Font;
+  font-size: 6em;
+  color: red;
+  text-align: center;
+  background-color: #000000c4;
+  border: double;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.levelCompleted{
+  position: absolute;
+  top: 40%;
+  left: 7%;
+  font-family: tetris3Font;
+  font-size: 4em;
+  color: green;
+  text-align: center;
+  background-color: #000000c4;
+  border: double;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.backgroundLevel1 { background-image: url('/assets/img/airplane.jpg');}
+.backgroundLevel2 { background-image: url('/assets/img/building.jpg');}
+.backgroundLevel3 { background-image: url('/assets/img/heart.jpg');}
+.backgroundLevel4 { background-image: url('/assets/img/robot.jpg');}
+.backgroundLevel5 { background-image: url('/assets/img/cam.jpg');}
+.backgroundLevel6 { background-image: url('/assets/img/ants.jpg');}
+.backgroundLevel7 { background-image: url('/assets/img/falling.jpg');}
+.backgroundLevel8 { background-image: url('/assets/img/missingPiece.jpg');}
+.backgroundLevel9 { background-image: url('/assets/img/perfectSpot.jpg');}
+.backgroundLevel10 { background-image: url('/assets/img/wherei.jpg');}
+.backgroundLevel11 { background-image: url('/assets/img/matrix.jpg');}
+
+
+.window-layer {
+  position: absolute;
+  border-radius: 5px;
+  padding: 15px;
+  top: 30%;
+  left: 370px;
+  z-index: 9999;
+  background-color: rgb(63, 92, 147);
+  width: 300px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1f2f47;
+
+  p {
+    font-family: tetris3Font;
+    font-size: xxx-large;
+
+    span {
+      background-color: white;
+    }
+  }
+}
+
+.primary {
+	box-shadow:inset 0px 0px 15px 3px #23395e;
+	background:linear-gradient(to bottom, #2e466e 5%, #415989 100%);
+	background-color:#2e466e;
+	border-radius:17px;
+	border:1px solid #1f2f47;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:6px 13px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #263666;
+  margin: 15px;
+}
+.primary:hover {
+	background:linear-gradient(to bottom, #415989 5%, #2e466e 100%);
+	background-color:#415989;
+}
+.primary:active {
+	position:relative;
+	top:1px;
+}
+
+.secondary {
+	box-shadow:inset 0px 0px 15px 3px #f29c93;
+	background:linear-gradient(to bottom, #fe1a00 5%, #ce0100 100%);
+	background-color:#fe1a00;
+	border-radius:17px;
+	border:1px solid #d83526;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:6px 13px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #b23e35;
+  margin: 15px;
+}
+.secondary:hover {
+	background:linear-gradient(to bottom, #ce0100 5%, #fe1a00 100%);
+	background-color:#ce0100;
+}
+.secondary:active {
+	position:relative;
+	top:1px;
+}
+
+
